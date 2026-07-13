@@ -34,3 +34,19 @@ Everything goes inside `#world`. Inside it, **1 unit = 1 metre**.
   `"0 45 0"` turns it 45° counter-clockwise seen from above.
 - Repeat the whole `<a-entity>...</a-entity>` block for every model —
   same file or different ones.
+
+## Primitives
+
+Simple shapes need no model file — one tag each:
+
+```html
+<a-box color="#4a8f3c" position="0 -0.01 0" width="0.5" height="0.02" depth="0.5"></a-box>
+<a-sphere color="#ffcc00" position="0.2 0.05 0" radius="0.05"></a-sphere>
+<a-cylinder color="#886644" position="-0.2 0.1 0" radius="0.02" height="0.2"></a-cylinder>
+```
+
+- Sizes and positions are metres, like everything else inside `#world`.
+- Primitives are placed by their CENTRE: a 10 cm box resting on the desk
+  needs `position` y = `0.05`, not `0`.
+- Others that work the same way: `<a-cone>`, `<a-torus>`, `<a-plane>`,
+  `<a-ring>`. `color` takes any CSS colour.

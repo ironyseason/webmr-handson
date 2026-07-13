@@ -40,8 +40,9 @@
     <a-light type="ambient" intensity="0.8"></a-light>
     <a-light type="directional" intensity="0.6" position="1 1 1"></a-light>
 
-    <!-- the desk: a soft grid, 10 cm per cell, at y = 0 -->
-    <a-plane rotation="-90 0 0" width="2" height="2" color="#3a4048"></a-plane>
+    <!-- the desk: a soft grid, 10 cm per cell, just below y = 0 so it
+         never z-fights with ground objects the scene puts at y = 0 -->
+    <a-plane rotation="-90 0 0" position="0 -0.004 0" width="2" height="2" color="#3a4048"></a-plane>
     <a-entity id="grid"></a-entity>
 
     <!-- where the marker lies (size = MARKER_WIDTH_M, drawn by the script) -->
@@ -71,6 +72,8 @@
       plane.setAttribute('src', './assets/markerA.png');
       plane.setAttribute('rotation', '-90 0 0');
       plane.setAttribute('position', '0 0.001 0');
+      plane.setAttribute('transparent', 'true');
+      plane.setAttribute('opacity', '0.45'); // reference only — real AR draws content over the paper
       plane.setAttribute('width', MARKER_WIDTH_M);
       plane.setAttribute('height', MARKER_WIDTH_M);
       ghost.appendChild(plane);
@@ -84,7 +87,7 @@
           line.setAttribute('rotation', '-90 0 0');
           line.setAttribute('width', horizontal ? 2 : 0.002);
           line.setAttribute('height', horizontal ? 0.002 : 2);
-          line.setAttribute('position', horizontal ? `0 0.0005 ${i / 10}` : `${i / 10} 0.0005 0`);
+          line.setAttribute('position', horizontal ? `0 -0.003 ${i / 10}` : `${i / 10} -0.003 0`);
           grid.appendChild(line);
         }
       }
