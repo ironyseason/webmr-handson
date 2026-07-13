@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Scene Preview (PC) | MR Hands-on</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <!-- for the components (real-units, fit-model). No camera, no marker. -->
+  <script src="./scene.js"></script>
+
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; font-family: sans-serif; }
+    #hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+      background: rgba(0, 0, 0, 0.7); color: #fff;
+      font-size: 14px; line-height: 1.6; padding: 8px 12px;
+    }
+    #hud a { color: #7cf; }
+    #model-info {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+      background: rgba(0, 0, 0, 0.7); color: #6f6;
+      font: 12px/1.5 monospace; padding: 6px 12px; white-space: pre-wrap;
+    }
+    #model-info.error { color: #f77; }
+  </style>
+</head>
+<body>
+
+  <div id="hud">
+    <b>Scene Preview (PC)</b> &mdash; the same scene as scene.html, no camera needed.
+    Drag to look, <b>WASD</b> to move &mdash; W flies wherever you are looking.
+    Edit scene.html, then reload this page. &middot; <a href="./index.html">Back to hub</a>
+  </div>
+  <div id="model-info">loading scene.html&hellip;</div>
+
+  <a-scene background="color: #2b3035" vr-mode-ui="enabled: false">
+
+    <!-- same lighting as scene.html -->
+    <a-light type="ambient" intensity="0.8"></a-light>
+    <a-light type="directional" intensity="0.6" position="1 1 1"></a-light>
+
+    <!-- the desk: a soft grid, 10 cm per cell, at y = 0 -->
+    <a-plane rotation="-90 0 0" width="2" height="2" color="#3a4048"></a-plane>
+    <a-entity id="grid"></a-entity>
+
+    <!-- where the marker lies (size = MARKER_WIDTH_M, drawn by the script) -->
+    <a-entity id="marker-ghost"></a-entity>
+
+    <!-- scene.html's #world gets injected here, WITHOUT real-units:
+         in this page 1 unit = 1 metre already, no conversion needed. -->
+    <a-entity id="preview-root"></a-entity>
+
+    <!-- start slightly above and in front of the desk, looking down at it -->
+    <a-entity position="0 0.45 0.85" rotation="-25 0 0">
+      <a-camera position="0 0 0" wasd-controls="acceleration: 12; fly: true"
+                look-controls="pointerLockEnabled: false"></a-camera>
+    </a-entity>
+
+  </a-scene>
+
+  <script>
+    // Pull the authored scene out of scene.html so there is exactly ONE
+    // source of truth. Whatever you change there shows up here on reload.
+    window.addEventListener('DOMContentLoaded', async () => {
+      const info = document.getElementById('model-info');
+
+      // marker footprint for scale reference
+      const ghost = document.getElementById('marker-ghost');
+      const plane = document.createElement('a-plane');
+      plane.setAttribute('src', './assets/markerA.png');
+      plane.setAttribute('rotation', '-90 0 0');
+      plane.setAttribute('position', '0 0.001 0');
+      plane.setAttribute('width', MARKER_WIDTH_M);
+      plane.setAttribute('height', MARKER_WIDTH_M);
+      ghost.appendChild(plane);
+
+      // grid lines every 10 cm
+      const grid = document.getElementById('grid');
+      for (let i = -10; i <= 10; i++) {
+        for (const horizontal of [true, false]) {
+          const line = document.createElement('a-plane');
+          line.setAttribute('color', '#4a525c');
+          line.setAttribute('rotation', '-90 0 0');
+          line.setAttribute('width', horizontal ? 2 : 0.002);
+          line.setAttribute('height', horizontal ? 0.002 : 2);
+          line.setAttribute('position', horizontal ? `0 0.0005 ${i / 10}` : `${i / 10} 0.0005 0`);
+          grid.appendChild(line);
+        }
+      }
+
+      try {
+        const html = await fetch('./scene.html').then((r) => r.text());
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const world = doc.querySelector('#world');
+        if (!world) throw new Error('#world not found in scene.html');
+        world.removeAttribute('real-units'); // here 1 unit = 1 metre already
+        world.removeAttribute('id');
+        document.getElementById('preview-root')
+          .insertAdjacentHTML('beforeend', world.outerHTML);
+        info.textContent = 'scene.html loaded. models loading…';
+      } catch (err) {
+        info.textContent = 'could not load scene.html: ' + err.message;
+        info.classList.add('error');
+      }
+    });
+  </script>
+</body>
+</html>

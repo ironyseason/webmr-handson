@@ -222,6 +222,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const anchor = document.querySelector('#anchor');
   const fusedEl = document.querySelector('#fused');
   const btnImu = document.getElementById('btn-imu');
+  if (!fusedEl || !anchor || !btnImu) return; // preview.html loads this file for the components only
 
   const fusion = () => fusedEl.components['imu-fusion'];
 
