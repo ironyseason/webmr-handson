@@ -69,20 +69,32 @@
   </div>
 
   <h2>Bring your own 3D model</h2>
-  <p>Stage 2 will show any model you give it. Free ones, no account needed:</p>
+  <p>Stage 2 will show any model you give it. You want a <code>.glb</code> file.
+    All of these are free and need no account.</p>
+
+  <p><b>Animated</b> &mdash; pick from here if you want to keep playing with animation:</p>
   <ul>
-    <li><a href="https://poly.pizza">poly.pizza</a> &mdash; search for anything, press
-      Download. Mostly still models, no animation.</li>
-    <li><a href="https://quaternius.com">quaternius.com</a> &mdash; animated characters
-      and creatures, in packs.</li>
+    <li><a href="https://quaternius.com">quaternius.com</a> &mdash; packs of characters
+      and animals. Download a pack, unzip, use any <code>.glb</code> inside.</li>
     <li><a href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models">Khronos
-      sample models</a> &mdash; the reference set, several are animated.</li>
+      sample models</a> &mdash; try <code>Fox</code>, <code>BrainStem</code>,
+      <code>CesiumMan</code>.</li>
   </ul>
-  <p>You want a <code>.glb</code> file. To install it: in <b>your fork</b> on GitHub, open
-    the <code>assets</code> folder, then <b>Add file → Upload files</b>, drop the
-    <code>.glb</code> in, and commit. Then put its file name into
-    <code>stage2.html</code>. Nothing else needs changing &mdash; the page measures the
-    model and sizes it for you, whatever units its author used.</p>
+
+  <p><b>Still models, no animation</b> &mdash; a far bigger choice of objects:</p>
+  <ul>
+    <li><a href="https://poly.pizza">poly.pizza</a> &mdash; search for anything.
+      These have no animation at all.</li>
+  </ul>
+  <p>That is not a dead end. If a model has no animation the page tells you so, and you
+    make it move yourself with an <code>animation</code> attribute &mdash; exactly the
+    spinning box trick from Stage 1.</p>
+
+  <p><b>To install one:</b> in <b>your fork</b> on GitHub, open the <code>assets</code>
+    folder, then <b>Add file → Upload files</b>, drop the <code>.glb</code> in, and
+    commit. Then put its file name into <code>stage2.html</code>. Nothing else needs
+    changing &mdash; the page measures the model and sizes it for you, whatever units
+    its author used.</p>
 
   <h2>How to change the code</h2>
   <ol>
